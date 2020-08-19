@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script language="JavaScript">
+        function back() {
+            self.location=document.referrer;
+        }
+    </script>
+    <style>
+        table{margin:0 auto}
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:770px;
+            height:190px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        span.title{
+            font-family: myFirstFont;
+            display:block;
+            width:85px;
+            height:30px;
+            position:relative;
+            top:-20px;
+            text-align: center;
+            background: white;}
+    </style>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
+
+    <script>
+        window.onload=function(){
+
+            var list2=" ",list3=" ";
+            $.ajax({
+                url: "get/findall_R_C",
+                type: "get",
+                dataType: "JSON",
+                async: true,
+                success: function (list) {
+                    var lis=" ",lis2=" ";
+                    var n;
+                    var kai1='<div4 id="but"><table border=1 cellspacing="0">' +
+                        '<th>序号</th>\n' +
+                        '    <th>账号</th>\n' +
+                        '    <th>原因</th>\n' +
+                        '    <th>返校时间</th>';
+                    var kai2='<th>辅导员意见</th>';
+                    var kai3='<th>申请时间</th>'
+                    var kai4= '<th>意见</th>'
+                    var kai5= '<th>操作</th>';
+                    var jie='</div></table>';
+                    for (var i = 0; i < list.length; i++) {
+                        if(list[i].counsellore=="待审核"){
+                            n=i+1;
+                            var t1='<tr>';
+                            var li0= '<td>' + n + '</td>'
+                            var li1= '<td>' + list[i].uid + '</td>'
+                            var li2= '<td>' + list[i].reason + '</td>'
+                            var li3 = '<td>' + list[i].e_time + '</td>'
+                            var li4= '<td>' + list[i].counsellore + '</td>'
+                            var li8='<td><button id="bt'+i+ '" value="' +i+'">'+"确认"+'</button></td>'
+                            var li7 = '<td>' + list[i].apply_time + '</td>'
+                            var li9='<td><select id="option"><option value="0">同意</option><option value="1">不同意</option></select></td>'
+                            var t2='</tr>';
+                            lis += t1+li0+li1+li2+li3+li4+li7+li9+li8+t2;
+                        }}
+                    for (var i = 0; i < list.length; i++) {
+                        if(list[i].counsellore=="同意"||list[i].counsellore=="不同意"){
+                            n=i+1;
+                            var t11='<tr>';
+                            var li01= '<td>' + n + '</td>'
+                            var li11= '<td>' + list[i].uid + '</td>'
+                            var li21= '<td>' + list[i].reason + '</td>'
+                            var li31 = '<td>' + list[i].e_time + '</td>'
+                            var li41= '<td>' + list[i].counsellore + '</td>'
+                            var li71 = '<td>' + list[i].apply_time + '</td>'
+                            var t21='</tr>';
+                            lis2 += t11+li01+li11+li21+li31+li41+li71+t21;
+                        }}
+                     list2=kai1+kai2+kai3+kai4+kai5+lis+jie;
+                     list3=kai1+kai2+kai3+lis2+jie;
+                    $("#d1").html(list2);
+                    $("#d2").html(list3);
+                    var obj=document.getElementById("but").getElementsByTagName("button")
+                    console.log(obj)
+                    for( var j=obj.length-1;j>=0;j--){
+
+                        obj[j].onclick =function(){
+                            var couns=$("#option option:selected").text();
+                            var formid=list[this.value].formid;
+                            $.ajax({
+                                url:"get/update_f",
+                                type:"post",
+                                data:{"formid":formid,"couns":couns},
+                                dataType: "json",
+                                async: false,
+                                success:function (data) {
+                                    if(data.flag=="1"){
+                                        alert("修改成功")
+                                    window.history.go(0)}
+                                    else{
+                                        alert("修改失败！")
+                                    }
+                                }
+                            })
+                        }
+                    }
+
+                },
+
+            })
+
+            $("#btn1").click(function () {
+                 var d1=document.getElementById("d1");
+                 var d2=document.getElementById("d2");
+                var d3=document.getElementById("d3");
+                var d4=document.getElementById("d4");
+                if($("#d2").css("display")=="block")
+                    d2.style.display="none";
+                if($("#d3").css("display")=="block")
+                    d3.style.display="none";
+                if($("#d4").css("display")=="block")
+                    d4.style.display="none";
+               if($("#d1").css("display")=="block")
+                   d1.style.display="none";
+               else d1.style.display="block"
+
+
+            })
+
+            $("#btn2").click(function () {
+                var d1=document.getElementById("d1");
+                var d2=document.getElementById("d2");
+                var d3=document.getElementById("d3");
+                var d4=document.getElementById("d4");
+                if($("#d1").css("display")=="block")
+                    d1.style.display="none";
+                if($("#d3").css("display")=="block")
+                    d3.style.display="none";
+                if($("#d4").css("display")=="block")
+                    d4.style.display="none";
+                if($("#d2").css("display")=="block")
+                    d2.style.display="none";
+                else d2.style.display="block"
+            })
+
+                var list4=" ",list5=" ";
+                $.ajax({
+                    url: "get/findall_L",
+                    type: "get",
+                    dataType: "JSON",
+                    async: true,
+                    success: function (list1) {
+
+                        var lis3=" ",lis4=" ";
+                        var n;
+                        var kai1='<div5 id="but1"><table border=1 cellspacing="0">' +
+                            '<th>序号</th>\n' +
+                            '    <th>账号</th>\n' +
+                            '    <th>学院</th>\n' +
+                            '    <th>原因</th>\n' +
+                            '    <th>出校时间</th>'+'    <th>返校时间</th>'
+                        ;
+                        var kai2='<th>辅导员意见</th>';
+                        var kai3='<th>申请时间</th>'
+                        var kai4= '<th>意见</th>'
+                        var kai5= '<th>操作</th>';
+                        var jie='</div></table>';
+                        for (var i = 0; i < list1.length; i++) {
+                            if(list1[i].couns=="待审核"){
+                                n=i+1;
+                                var t1='<tr>';
+                                var li0= '<td>' + n + '</td>'
+                                var li1= '<td>' + list1[i].uid + '</td>'
+                                var lt1='<td>' + list1[i].dept + '</td>'
+                                var li2= '<td>' + list1[i].reason + '</td>'
+                                var li3='<td>' + list1[i].l_time + '</td>'
+                                var li4 = '<td>' + list1[i].r_time + '</td>'
+                                var li6= '<td>' + list1[i].couns + '</td>'
+                                var li5='<td>' + list1[i].a_time + '</td>'
+                                var li9='<td><select id="option1"><option value="0">同意</option><option value="1">不同意</option></select></td>'
+                                var li7='<td><button id="bt'+i+ '" value="' +i+'">'+"确认"+'</button></td>'
+                                var t2='</tr>';
+                                lis3 += t1+li0+li1+lt1+li2+li3+li4+li6+li5+li9+li7+t2;
+                            }}
+                        for (var i = 0; i < list1.length; i++) {
+                            if(list1[i].couns=="同意"||list1[i].couns=="不同意"){
+                                n=i+1;
+                                var t11='<tr>';
+                                var li01= '<td>' + n + '</td>'
+                                var li11= '<td>' + list1[i].uid + '</td>'
+                                var lt2='<td>' + list1[i].dept + '</td>'
+                                var li21= '<td>' + list1[i].reason + '</td>'
+                                var li31='<td>' + list1[i].l_time + '</td>'
+                                var li41 = '<td>' + list1[i].r_time + '</td>'
+                                var li61= '<td>' + list1[i].couns + '</td>'
+                                var li51='<td>' + list1[i].a_time + '</td>'
+                                var t21='</tr>';
+                                lis4 += t11+li01+li11+lt2+li21+li31+li41+li61+li51+t21;
+                            }}
+                        list4=kai1+kai2+kai3+kai4+kai5+lis3+jie;
+                        list5=kai1+kai2+kai3+lis4+jie;
+                        $("#d3").html(list4);
+                        $("#d4").html(list5);
+                        var obj=document.getElementById("but1").getElementsByTagName("button")
+                        console.log(obj)
+                        for( var j=obj.length-1;j>=0;j--){
+
+                            obj[j].onclick =function(){
+                                var couns=$("#option1 option:selected").text();
+                                var formid=list1[this.value].formid;
+                                $.ajax({
+                                    url:"get/update_l",
+                                    type:"post",
+                                    data:{"formid":formid,"couns":couns},
+                                    dataType: "json",
+                                    async: false,
+                                    success:function (data) {
+                                        if(data.flag=="1"){
+                                            alert("修改成功")
+                                            window.history.go(0)}
+                                        else{
+                                            alert("修改失败！")
+                                        }
+                                    }
+                                })
+                            }
+                        }
+
+                    },
+
+                })
+
+                $("#btn3").click(function () {
+                    var d1=document.getElementById("d1");
+                    var d2=document.getElementById("d2");
+                    var d3=document.getElementById("d3");
+                    var d4=document.getElementById("d4");
+                    if($("#d1").css("display")=="block")
+                        d1.style.display="none";
+                    if($("#d2").css("display")=="block")
+                        d2.style.display="none";
+                    if($("#d4").css("display")=="block")
+                        d4.style.display="none";
+                    if($("#d3").css("display")=="block")
+                        d3.style.display="none";
+                    else d3.style.display="block"
+
+
+                })
+
+                $("#btn4").click(function () {
+                    var d1=document.getElementById("d1");
+                    var d2=document.getElementById("d2");
+                    var d3=document.getElementById("d3");
+                    var d4=document.getElementById("d4");
+                    if($("#d1").css("display")=="block")
+                        d1.style.display="none";
+                    if($("#d2").css("display")=="block")
+                        d2.style.display="none";
+                    if($("#d3").css("display")=="block")
+                        d3.style.display="none";
+                    if($("#d4").css("display")=="block")
+                        d4.style.display="none";
+                    else d4.style.display="block"
+                })
+
+        }
+    </script>
+
+
+
+</head>
+
+<body>
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+<p class="p2" ><a href="javascript:location.href='exitServlet';">退出</a></p>
+<hr>
+<p class="p2"><input name="button" type="button" onclick="back()" value="返回" style="width:110px; height:40px"></p>
+<br>
+<div>
+<table>
+    <tr>
+        <td>
+            <input type="button" id="btn1" value="查看待审核的返校申请">
+            <input type="button" id="btn2" value="查看已审核的返校申请">
+            <input type="button" id="btn3" value="查看待审核的出校申请">
+            <input type="button" id="btn4" value="查看已审核的出校申请">
+        </td>
+    </tr>
+</table>
+<div1 id="d1" style="display:none;"></div1>
+<div2 id="d2"  style="display: none"></div2>
+<div3 id="d3" style="display: none"></div3>
+<div4 id="d4" style="display: none"></div4>
+</div>
+</body>
+</html>

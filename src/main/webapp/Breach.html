@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>breach</title>
+    <style>
+        table{margin: 0 auto}
+        div{
+            position: center;
+            float: contour;
+            width:300px;
+            height:360px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+
+    </style>
+    <script language="JavaScript">
+    function back() {
+    self.location=document.referrer;
+    }
+    </script>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <script src="js/jquery-3.3.1.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/popup.css" />
+
+    <script>
+        function xianshi() {
+
+            document.getElementById('all_light').style.display = 'block';
+
+            document.getElementById('contes').style.display = 'block';
+
+        }
+        function wuzhi() {
+
+            document.getElementById('all_light1').style.display = 'block';
+
+            document.getElementById('contes1').style.display = 'block';
+
+        }
+    </script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/Search.css" />
+   <!-- 被处罚的学生信息查看-->
+    <script>
+        $(function () {
+
+
+            $.ajax({
+                url:"get/findall_br",
+                type:"get",
+                dataType:"json",
+                sync:false,
+                success:function (list) {
+                    if(list.length==0) {alert("暂无违纪学生")
+                        self.location=document.referrer;    //回退上一页
+                    }else{
+                        var lis1="",lis2=" ",lis3=" ";
+                        var kai='<table border="1" cellspacing="0">'
+                        var tou='<th>序号</th>' +
+                            '<th>学号</th>' +
+                            '<th>防控组账号</th>' +
+                            '<th>处罚类型</th>' +
+                            '<th>处罚方式</th>' +
+                            '<th>处罚时间</th>'
+                        var wei='</table>'
+                        var n=0;
+                        for(var i=0;i<list.length;i++){
+                            n=n+1;
+                            var li1='<tr><td>'+n+'</td>';
+                            var li2='<td>'+list[i].sid+'</td>'
+                            var li3='<td>'+list[i].fid+'</td>'
+                            var li4='<td>'+list[i].type+'</td>'
+                            var li5='<td>'+list[i].punish+'</td>'
+                            var li6='<td>'+list[i].date+'</td></tr>'
+                            lis1=lis1+li1+li2+li3+li4+li5+li6;
+                        }
+                        /*$("#div1").html(kai+tou+lis1+wei)*/
+
+                        $("#bt1").click(function () {
+                            if($("#inp").val()!=null||$("#inp").val()!=" "){
+                                if($("#div1").css("display")=="block"){
+                            d1=document.getElementById("div1")
+                             d1.style.display="none"}
+                                var num=$("#inp").val();
+                                search(num,list);
+
+                            }else{
+                                if($("#div1").css("display")=="none"){
+                                    var d2=document.getElementById("div1")
+                                    d2.style.display="block"}
+                            }
+
+                        })
+                        $("#inp").keyup(function (e) {
+                            if(e.keyCode==13){
+                                if($("#inp").val()!=null||$("#inp").val()!=" "){
+                                    if($("#div1").css("display")=="block"){
+                                        d1=document.getElementById("div1")
+                                    }
+                                        d1.style.display="none"}
+                            num=$("#inp").val();
+                            search(num,list);}
+                        })
+                    }
+
+                }
+            })
+
+            function search(num,list) {
+                var kai='<table border="1" cellspacing="0" align="center">'
+                var tou='<th>序号</th>' +
+                    '<th>学号</th>' +
+                    '<th>防控组账号</th>' +
+                    '<th>处罚类型</th>' +
+                    '<th>处罚方式</th>' +
+                    '<th>处罚时间</th>'
+                var wei='</table>'
+                var n=0;
+                if(num[0]=="F"){
+                    lis2=" ";
+                    n=0;
+                    for(var i=0;i<list.length;i++){
+                        if(list[i].fid==num){
+                            n=n+1;
+                            var li11='<tr><td>'+n+'</td>';
+                            var li12='<td>'+list[i].sid+'</td>'
+                            var li13='<td>'+list[i].fid+'</td>'
+                            var li14='<td>'+list[i].type+'</td>'
+                            var li15='<td>'+list[i].punish+'</td>'
+                            var li16='<td>'+list[i].date+'</td></tr>'
+                            lis2=lis2+li11+li12+li13+li14+li15+li16;
+                        }         }
+                    $("#div2").parent();
+                    $("#div2").html(kai+tou+lis2+wei)
+
+                }else{
+                    lis3=" ";
+                    n=0;
+                    for(var i=0;i<list.length;i++){
+                        if(list[i].sid==num){
+                            n=n+1;
+                            var li21='<tr><td>'+n+'</td>';
+                            var li22='<td>'+list[i].sid+'</td>'
+                            var li23='<td>'+list[i].fid+'</td>'
+                            var li24='<td>'+list[i].type+'</td>'
+                            var li25='<td>'+list[i].punish+'</td>'
+                            var li26='<td>'+list[i].date+'</td></tr>'
+                            lis3=lis3+li21+li22+li23+li24+li25+li26;
+                        }         }
+                    $("#div2").parent();
+                    $("#div2").html(kai+tou+lis3+wei)
+
+                }
+
+            }
+        })
+    </script>
+</head>
+<body onLoad="startTime()">
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+
+<p class="p2">当前时间为<font><span id="nowDateTimeSpan"></span></font></p>
+<p class="p2"> <a href="javascript:location.href='exitServlet';">退出</a></p>
+
+<br>
+<hr>
+<br>
+<p class="p2"><input name="button" type="button" onclick="back()" value="返回" style="width:110px; height:40px"></p>
+<div1 class="search">
+    <input type="text" placeholder="请输入学号或防控组账号...." name="" id="inp" value="" />
+    <button id="bt1"><i>搜索</i></button>
+</div1>
+<div2 id="div1"></div2>
+<div3 id="div2"></div3>
+
+</body>
+</html>

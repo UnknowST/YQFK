@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>teacher</title>
+    <style>
+
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 18px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:340px;
+            height:360px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+    </style>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <script src="js/jquery-3.3.1.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/popup.css" />
+
+    <script>
+        function xianshi() {
+
+            document.getElementById('all_light').style.display = 'block';
+
+            document.getElementById('contes').style.display = 'block';
+
+        }
+        function wuzhi() {
+            $.ajax({
+                url: "fill/good_findall",
+                type: "get",
+                dataType: "json",
+                async: true,
+                success: function (list) {
+                    var kai = "<select id='g_name'>"
+                    var jie = "</select>"
+                    var lis;
+
+                    for (var i = 0; i < list.length; i++) {
+                        li = "<option value=" + i + ">" + list[i].g_name + "</option>";
+                        lis += li;
+                    }
+                    lis = kai + lis + jie;
+                    $("#g_name").html(lis);
+
+                    $("#g_name").change(function () {    //监听select的值
+
+                        var num = $("#g_name option:selected").val();
+                        /*var num=document.getElementById("g_name");*/
+
+                        var lt = "库存数量:";
+                        var ll = list[num].total
+                        $("#kucun").html(lt);
+                        $("#num").html(ll);
+                    })
+                    var num = $("#g_name option:selected").val();   //获取select的值
+                    var lt = "库存数量:";
+                    var ll = list[num].total
+                    $("#kucun").html(lt);
+                    $("#num").html(ll);
+                }
+            })
+
+            document.getElementById('all_light1').style.display = 'block';
+
+            document.getElementById('contes1').style.display = 'block';
+
+        }
+    </script>
+    <script>
+        window.tlt="";
+
+        $(function () {
+
+            $("#btn1").click(function () {
+                //var form=$("#wzapply").serialize()
+                var amount=document.getElementById("amount").value;
+                var form1=$('#g_name option:selected').text();
+
+                var da={'g_name':form1,'amount':amount}
+
+                $.ajax(
+
+                    {
+                        url:"fill/wuzi_apply",
+                        type:"post",
+                        data:da,
+                        dataType:"json",
+                        async:true,
+                        success:function (data) {
+
+                            if(data.flag=="1"){
+                                alert("办理成功");
+                                close2();
+                            }else{
+                                alert(data.errorMsg)
+
+                            }
+                        },
+
+
+                    }
+                )
+
+            });
+
+            $("#a1").click(function () {
+
+                $.ajax(
+                    {
+                        url: "findUser/infor",
+                        type: "get",
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+
+                            window.tlt=data.title;
+                        },
+                    }
+                )
+
+                tlt=window.tlt;
+                if (tlt == '辅导员' ) {
+                    window.location.href = "./Examine.html"
+                }
+                if( tlt == '副书记' )
+                {
+                    var d1= document.getElementById("d3");
+                    if($("#d3").css("display")=="none")
+                        d1.style.display="block";
+                    else d1.style.display="none";
+                }
+                if( tlt =='书记' )
+                {
+                    var d3= document.getElementById("d4");
+                    if($("#d4").css("display")=="none")
+                        d3.style.display="block";
+                    else d3.style.display="none";
+                }
+                if(tlt != '辅导员'&&tlt != '副书记'&&tlt !='书记') {   //存在执行错误
+                    alert("暂无代办事务")
+                }
+
+            })
+
+        })
+
+
+    </script>
+    <script>
+        function huz() {
+            d1=document.getElementById("div1");
+            if($("#div1").css("display")=="none")
+                d1.style.display="block";
+            else d1.style.display="none";
+        }
+    </script>
+</head>
+<body onLoad="startTime()">
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+
+<p class="p2">当前时间为<font><span id="nowDateTimeSpan"></span></font></p>
+<p class="p2"> <a href="javascript:location.href='exitServlet';">退出</a></p>
+<hr>
+<br>
+<div>
+
+<p class="p2"><a href="Health_R.html">健康信息填报</a></p>
+<!--<p><a href="R_school.html">返校申请</a></p>-->
+
+<p class="p2"><a  href="javascript:void(0)"  onclick="xianshi()" >返校申请</a></p>
+<P class="p2"><a  href="javascript:void(0)"  onclick="wuzhi()" >防疫物资申请</a></P>
+
+<p class="p2"><a href="javascript:void(0)" onmouseover="huz()">查看申请进度</a></p>
+<div1 id="div1" style="display: none">
+    <p class="p2"><a href="E_apply.html">查看返校申请进度</a>&nbsp;&nbsp;&nbsp;<a href="Look_good_apply.html">查看防疫物资申请进度</a></p>
+</div1>
+
+
+<p class="p2"><a id="a1"  href="javascript:void(0)"  >待办事务</a></p>
+<P CLASS="p2"><div2 id="d3" style="display: none"><a href="D_Examine_S.html" >审核学生申请</a>&nbsp; &nbsp;&nbsp;&nbsp;<a href="D_Examine_T.html">审核教师申请</a></div2></P>
+    <P CLASS="p2"><div3 id="d4" style="display: none"><a href="Examine_S.html">审核学生申请</a>&nbsp; &nbsp;&nbsp;&nbsp;<a href="Examine_T.html">审核教师申请</a></div3></P>
+    <div4 id="contes" style="">
+
+    <div5 style="width:500px;height:40px;">
+
+        返校申请
+        <hr>
+
+
+        <form id="teacher" style=" margin-left: 100px;">
+            <table>
+                <tr>
+                    <td><lable>原因:</lable></td>
+                    <td><input type="text" name="reason" id="reason"> </td>
+                </tr>
+                <tr>
+                    <td ><label for="dept">学院</label></td>
+                    <td > <select name="dept" id="dept">
+                        <option name="col" value ="0"></option>
+                        <option name="col" value ="信息学院">信息学院</option>
+                        <option name="col" value ="经管学院">经管学院</option>
+                        <option name="col" value ="食品学院">食品学院</option>
+                        <option name="col" value ="水产与生命学院">水产与生命学院</option>
+                        <option name="col" value ="外国语学院">外国语学院</option>
+                        <option name="col" value ="马克思主义学院">马克思主义学院</option>
+                        <option name="col" value ="海洋科学学院">海洋科学学院</option>
+                        <option name="col" value ="海洋生态与环境学院">海洋生态与环境学院</option>
+                        <option name="col" value ="工程学院">工程学院</option>
+                        <option name="col" value ="海洋文化与法律学院">海洋文化与法律学院</option>
+                        <option name="col" value ="爱恩学院">爱恩学院</option>
+                        <option name="col" value ="体育部">体育部</option>
+                        <option name="col" value ="继续教育学院">继续教育学院</option>
+                        <option name="col" value ="国际文化交流学院">国际文化交流学院</option>
+                    </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>返校时间:</label></td>
+                    <td><input type="datetime-local" id="e_time" name="e_time"></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="bt1" name="bt1" value="提交"></td>
+
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="bt2" name="bt2"  onclick="close1()" value="取消"></td>
+                </tr>
+            </table>
+        </form>
+
+    </div5>
+
+</div4>
+<div6 id="all_light">
+</div6>
+<div7 id="contes1" style="">
+
+    <div8 style="width:500px;height:40px;">
+        防疫物资申请
+
+        <hr>
+        <form id="wzapply" style=" margin-left: 100px;">
+            <table>
+                <tr>
+                    <td><label>物资名称:</label></td>
+                    <td><div9 id="g_name"></div9></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div10 id="kucun"></div10>
+
+                    </td>
+                    <td>
+                        <div11 id="num"></div11>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>数量:</label></td>
+                    <td><input type="number" id="amount" name="amount"></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="btn1" name="btn1" value="确认申请"> </td>
+                  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="btn2" onclick="close2()" value="取消">
+                </td>
+                </tr>
+            </table>
+        </form>
+    </div8>
+</div7>
+<div12 id="all_light1">
+</div12>
+</div>
+
+<script>
+   function close1()
+
+    {
+        document.getElementById('all_light').style.display = 'none';
+        document.getElementById('contes').style.display = 'none';
+    }
+   function close2()
+
+   {
+       document.getElementById('all_light1').style.display = 'none';
+       document.getElementById('contes1').style.display = 'none';
+   }
+
+    $("#bt1").click(function () {
+        var reason=$("#reason").val();
+        var dept=$("#dept option:selected").text();
+        var e_time=$("#e_time").val();
+        $.ajax({
+            url:'fill/fill/e_school',
+            type:'post',
+            dataType:'json',
+            data:{"reason":reason,"dept":dept,"e_time":e_time},
+            sync:false,
+            success:function (data) {
+
+                console.log(data)
+                if (data.flag==1){
+
+                    alert("提交成功")
+                    close1();
+                }
+                else{
+                    alert(data.errorMsg);
+                }
+
+            }
+        })
+    })
+
+</script>
+
+</body>
+</html>

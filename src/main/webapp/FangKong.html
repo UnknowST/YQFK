@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>防控小组</title>
+    <style>
+
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:510px;
+            height:270px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        span.title{
+            font-family: myFirstFont;
+            display:block;
+            width:85px;
+            height:30px;
+            position:relative;
+            top:-20px;
+            text-align: center;
+            background: white;}
+    </style>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/popup.css" />
+    <script src="js/jquery-3.3.1.js"></script>
+</head>
+<body onLoad="startTime()">
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+
+<p class="p2">当前时间为<font><span id="nowDateTimeSpan"></span></font></p>
+<p class="p2" ><a href="javascript:location.href='exitServlet';">退出</a></p>
+<hr>
+<br>
+<DIV>
+
+<p class="p2"><a href="javascript:void(0)"  onclick="add()">违纪学生登记</a></p>
+<p class="p2"><a href="Breach.html">查找违纪学生信息</a></p>
+<p class="p2"><a  href="Dis_record.html">查看消毒记录</a></p>
+<p class="p2"><a id="a1" href="javascript:void(0)">查看每日健康申报信息</a></p>
+<div1 id="div1" style="display: none;">
+    <p class="p2"><a href="Healthy_student.html">查看学生</a>
+    <a href="Healthy_Teacher.html">查看教师</a>
+    <a href="Healthy_Houqin.html">查看后勤人员</a></p>
+</div1>
+<script>
+    d1=document.getElementById("a1");
+    d1.onmouseover=function () {
+      div1=document.getElementById("div1");
+      if($("#div1").css("display")=="none")
+          div1.style.display="block";
+      else div1.style.display="none";
+    }
+</script>
+
+<!--弹窗div-->
+<div2 id="contes" style="">
+
+    <div3 style="width:500px;height:40px;">
+
+        添加违纪学生信息
+
+        <hr>
+        <form id="breakstudent" style=" margin-left: 100px;">
+            <table>
+                <tr>
+                    <td><lable>学号:</lable></td>
+                    <td><input type="text" name="sid" id="sid"> </td>
+                </tr>
+                <tr>
+                    <td><lable>处罚类型:</lable></td>
+                    <td><input type="text" name="type" id="type"> </td>
+                </tr>
+                <tr>
+                    <td><lable>处罚方式:</lable></td>
+                    <td><input type="text" name="punish" id="punish"> </td>
+                </tr>
+                <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="bt1" name="bt1" value="提交"></td>
+                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="bt2" name="bt2"   value="取消"></td>
+                </tr>
+            </table>
+        </form>
+
+    </div3>
+
+</div2>
+
+<div4 id="all_light">
+
+</div4>
+<script>
+    function add() {
+
+        document.getElementById('all_light').style.display = 'block';
+
+        document.getElementById('contes').style.display = 'block';
+
+    }
+
+    $("#bt2").click(function () {
+        document.getElementById('all_light').style.display = 'none';
+
+        document.getElementById('contes').style.display = 'none';
+    })
+    $("#bt1").click(function () {
+        var form=$("#breakstudent").serialize()
+        $.ajax({
+            url:"get/insert_break",
+            type:"post",
+            data:form,
+            dataType:"json",
+            sync:false,
+            success:function (data) {
+                if(data.flag==1) {
+                    alert("登记成功")
+                }else alert("登记失败");
+
+            }
+
+        })
+    })
+</script>
+</DIV>
+</body>
+</html>

@@ -1,0 +1,63 @@
+1.ajax数据传到servlet表单的提交按钮typt=button
+2.进度记录
+    进行到登陆校验
+登录界面在登录失败后不能刷新验证码---待解决
+3.整合表单项
+4.BeanUtils不支持date类型转换 需要注册
+DateConverter converter = new DateConverter();
+converter.setPattern(new String("yyyy-MM-dd"));
+ConvertUtils.register(converter,Date.class);
+
+直接吧bean里面的date类型改成string
+实体类数据名称要和数据库中相同  不区分大小写
+解决方法 数据库查询的时候取别名
+进度记录:
+  登录模块已经完成 ---
+  每日健康申报模块已经完成 因为健康申报表里面的主键来自其他关联表 所以要是账号不存在的人填报是不发加进数据库的
+  返校申请进度查询已经完成
+  物资申请和库存查询已经完成
+   消毒登记模块已经完成
+
+   动态插入表格存在undefined的原因是变量没有初始化为空
+
+待解决问题：
+ 1、登录验证失败验证码不会刷新的问题
+ 2、查询lisi集合时候 遇到
+ java.lang.reflect.InvocationTargetException 错误  解决 使用ajax访问json数据
+ 3.登录后账号不能保存下来    已解决 还是jdbc模板查询类数据时候实体类列名称定义有区别
+ 4.怎么实现弹窗式表单填写
+ 5.前台表单数据提交到后台显示为Null
+ 6.怎么监听多个button
+ 7.完成进度查看和审核处理
+ 8.辅导员修改出校申请表单状态失败
+ 9.违纪学生怎么在页面实现动态查找
+ 10.副书记 书记对老师和学生的申请进行审核还没完成
+ 11.防控组的功能还没有完全实现
+
+ 12.老师健康信息填报那里不能仅仅对工号进行搜索
+ 辅导员对申请进行审核 但是不知道辅导员是谁啊  同理书记副书记也是一样的
+ 地址选择第三栏还不会动态变化
+
+jsp判断变量是否为空 可以用length 的长度来判断
+//下一阶段任务
+1、完成学生返校离校申请提交和查询进度
+2.完成老师申请的进度查询
+3.完成后勤人员消毒记录插入，进校申请插入
+4.完成进度查看和审核
+5.完成防控组的功能
+
+
+  window.history.go(0)    //刷新页面
+  self.location=document.referrer;    //回退上一页
+        $.ajax({
+                url: "fill/leave_apply",
+                type: "get", post
+                dataType: "json",
+                async: true, false
+                success: function (list) {
+
+
+                }
+         当async属性的值为false时是同步的，Ajax请求将整个浏览器锁死，只有ajax请求返回结果后，才执行ajax后面的alert语句。
+
+         当async属性的值为true时是异步的，即不会等待ajax请求返回的结果，会直接执行ajax后面的alert语句。

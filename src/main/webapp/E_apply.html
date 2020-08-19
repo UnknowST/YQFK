@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<head>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <title>查看返校申请进度</title>
+    <script language="JavaScript">
+        function back() {
+            self.location=document.referrer;
+        }
+    </script>
+    <style>
+
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:530px;
+            height:320px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        span.title{
+            font-family: myFirstFont;
+            display:block;
+            width:85px;
+            height:30px;
+            position:relative;
+            top:-20px;
+            text-align: center;
+            background: white;}
+    </style>
+
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <script>
+        window.onload=function(){
+
+            $.ajax({
+                url: "fill/fanxiao_apply",
+                type: "get",
+                dataType: "json",
+                async: true,
+                success: function (list) {
+                    if (list.length == 0) {
+                        alert("暂无申请记录")
+                        self.location=document.referrer;    //回退上一页
+                    } else{
+
+                        var lis=" ";
+                    var n;
+                    var kai = '<div2 id="but"><table border=1 cellspacing="0">' +
+                        '<th>序号</th>\n' +
+                        '    <th>账号</th>\n' +
+                        '    <th>原因</th>\n' +
+                        '    <th>返校时间</th>\n' +
+                        '    <th>申请时间</th>\n' +
+                        '    <th>操作</th>';
+                    var jie = '</table></div>';
+                    for (var i = 0; i < list.length; i++) {
+                        n = i + 1;
+
+                        var t1 = '<tr>';
+                        var li0 = '<td>' + n + '</td>'
+                        var li1 = '<td>' + list[i].uid + '</td>'
+                        var li2 = '<td>' + list[i].reason + '</td>'
+                        var li3 = '<td>' + list[i].e_time + '</td>'
+
+                        var li7 = '<td>' + list[i].apply_time + '</td>'
+
+                        var li8 = '<td><button id="bt' + i + '" value="' + i + '">' + "查看进度" + '</button></td>'    //
+                        //var li8='<td><input type="button" value="查看进度"></td>'
+
+                        var t2 = '</tr>';
+                        lis += t1 + li0 + li1 + li2 + li3 + li7 + li8 + t2;       //li4+li5+li6+
+
+                    }
+                    var list2=" ";
+                    list2 = kai + lis + jie;
+
+                    $("#tr1").html(list2);
+
+                    var obj = document.getElementById("but").getElementsByTagName("button")
+
+
+
+
+                    for (var j = obj.length - 1; j >= 0; j--) {
+
+                        obj[j].onclick = function () {
+                            if (list[this.value].uid[0] == "T")
+                                alert("\n副书记意见：" + list[this.value].d_secr + "\n书记意见：" + list[this.value].secr);
+                            else
+                                alert("\n辅导员意见：" + list[this.value].counsellore + "\n副书记意见：" + list[this.value].d_secr + "\n书记意见：" + list[this.value].secr);
+                        }
+                    }
+                }
+                },
+            })
+        }
+    </script>
+
+</head>
+<body>
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+<p class="p2" ><a href="javascript:location.href='exitServlet';">退出</a></p>
+<hr>
+<p class="p2"><input name="button" type="button" onclick="back()" value="返回" style="width:110px; height:40px"></p>
+<div>
+    <br>
+<div1 id="tr1">
+
+</div1>
+</div>
+</body>
+</html>

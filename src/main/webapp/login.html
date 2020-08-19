@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <style>
+
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:300px;
+            height:360px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        span.title{
+            font-family: myFirstFont;
+            display:block;
+            width:85px;
+            height:30px;
+            position:relative;
+            top:-20px;
+            text-align: center;
+            background: white;}
+    </style>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
+
+
+    <script>
+      function checkid(){
+          var id=document.getElementById("id").value;
+          if(id==null||id==""){
+              //边框变为红色
+              $("#id").css("border","1px solid red");
+              return false;
+          }
+          else return true;
+      }
+      function checkpassword(){
+          var password=document.getElementById("password").value;
+          if(password==null||password==""){
+              $("#password").css("border","1px solid red");
+              return false;
+          }
+          else  return true;
+      }
+      function checkshenfen(){
+          var shenfen=document.getElementById("shenfen").value;
+          if(shenfen==0){
+              $("#shenfen").css("border","1px solid red");
+              return false;
+          }
+          else return true;
+      }
+        $(function () {
+
+            $("#btn").click(function () {
+
+                var form=$("#loginform").serialize()
+                if(checkid()&& checkpassword()&& checkshenfen()) {
+
+                    $.ajax(
+                        {
+                            url: "loginServlet",
+                            type: "post",
+                            data: form,
+                            dataType: "json",
+                            async: false,
+                            success: function (data) {
+                                if (data.flag == "1") {
+                                    if (data.data == "1")
+                                        window.location.href = "./student.html";
+                                    if (data.data == "2")
+                                        window.location.href = "./Teacher.html";
+                                    if (data.data == "3")
+                                        window.location.href = "Houqin.html";
+                                    if (data.data == "4")
+                                        window.location.href = "./FangKong.html";
+                                } else {
+
+                                    $("#msg").html(data.errorMsg)
+                                    var img=document.getElementById("code");
+                                    changeCheckCode(img);
+
+                                }
+                            }
+
+                        }
+                    )
+
+                }
+                return false;
+            });
+            $("#id").blur(checkid());
+            $("#password").blur(checkpassword);
+            $("#shenfen").blur(checkshenfen);
+        })
+    </script>
+</head>
+<body onLoad="startTime()">
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+<p class="p1">上海海洋大学</p>
+<p class="p1">疫情防控管理系统</p>
+<p class="p2">当前时间为<font><span id="nowDateTimeSpan"></span></font></p>
+<hr>
+<br>
+<div>
+<form id="loginform" method="post" >
+    <table>
+        <tr><span id="msg" style="color: red"></span></tr>
+        <tr>
+            <td><label for="id"><h2>账号：</label></td>
+            <td><input name="id" id="id" type="text" placeholder="请输入账号" autocomplete="off">
+
+            </td></h2>
+        </tr>
+        <tr>
+            <td><label for="password"><h2>密码：</label></td>
+            <td><input name="password" id="password" type="text" placeholder="请输入密码" autocomplete="off"></td></h2>
+        </tr>
+        <tr>
+            <td><label for="code"><h2>验证码：</label></td>
+            <td><input name="check" type="text" placeholder="请输入验证码" autocomplete="off"></td></h2>
+        </tr>
+        <tr>
+            <td align="center" colspan="2"><span><img src="checkCode" alt="" id="code" onclick="changeCheckCode(this)"></span></td>
+            <script type="text/javascript">
+                //图片点击事件
+                function changeCheckCode(img) {
+                    img.src="checkCode?"+new Date().getTime();
+                }
+            </script>
+        </tr>
+        <tr>
+            <label for="shenfen"><h2>你的身份是：</label>
+          <select id="shenfen" name="shenfen">
+              <option id="shen0" value="0"></option>
+              <option id="shen1" value="1">学生</option>
+              <option id="shen2" value="2">教师</option>
+              <option id="shen3" value="3">后勤</option>
+              <option id="shen4" value="4">防控小组</option>
+          </select></h2>
+        </tr>
+        <tr>
+            <td align="center" colspan="2"><input type="button" id="btn" name="btn" value="登录" style="width:50px; height:40px"></td>
+        </tr>
+    </table>
+</form>
+</div>
+</body>
+</html>

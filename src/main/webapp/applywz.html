@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>applywz</title>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script>
+        window.onload=function(){
+
+            $.ajax({
+                url:"fill/good_findall",
+                type: "get",
+                dataType: "json",
+                async: true,
+                success:function (list) {
+                    var kai="<select id='g_name'>"
+                    var jie="</select>"
+                    var lis;
+
+                    for(var i=0;i<list.length;i++){
+                        li="<option value="+i+">"+list[i].g_name+"</option>";
+                        lis+=li;
+                    }
+                    lis=kai+lis+jie;
+                    $("#g_name").html(lis);
+
+                    $("#g_name").change(function () {    //监听select的值
+
+                        var num=$("#g_name option:selected").val();
+                        /*var num=document.getElementById("g_name");*/
+
+                        var lt="库存数量:";
+                        var ll=list[num].total
+                        $("#kucun").html(lt);
+                        $("#num").html(ll);
+                    })
+                    var num=$("#g_name option:selected").val();   //获取select的值
+                    var lt="库存数量:";
+                    var ll=list[num].total
+                    $("#kucun").html(lt);
+                    $("#num").html(ll);
+                }
+            })
+
+        }
+
+        $(function () {
+
+            $("#btn1").click(function () {
+                //var form=$("#wzapply").serialize()
+                var amount=document.getElementById("amount").value;
+                var form1=$('#g_name option:selected').text();
+
+                var da={'g_name':form1,'amount':amount}
+
+                $.ajax(
+
+                    {
+                        url:"fill/wuzi_apply",
+                        type:"post",
+                        data:da,
+                        dataType:"json",
+                        async:true,
+                        success:function (data) {
+
+                            if(data.flag=="1"){
+                                alert("办理成功");
+                                self.location=document.referrer;    //回退上一页
+                            }else{
+                                alert(data.errorMsg)
+
+                            }
+                        },
+
+
+                    }
+                )
+
+            });
+        })
+    </script>
+</head>
+<body>
+<form id="wzapply">
+    <table>
+        <tr>
+            <td><label>物资名称:</label></td>
+            <td><div id="g_name"></div><!--<input type="text" id="g_name" name="g_name">--></td>
+        </tr>
+        <tr>
+            <td>
+                <div id="kucun"></div>
+
+            </td>
+            <td>
+                <div id="num"></div>
+            </td>
+        </tr>
+        <tr>
+            <td><label>数量:</label></td>
+            <td><input type="number" id="amount" name="amount"></td>
+        </tr>
+        <tr>
+            <td> <td><input type="button" id="btn1" name="btn1" value="确认申请"></td></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

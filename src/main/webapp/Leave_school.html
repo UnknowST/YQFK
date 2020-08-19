@@ -1,0 +1,61 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<head>
+    <script src="js/jquery-3.3.1.js"></script>
+    <title>lixiaoapply</title>
+    <script>
+        window.onload=function(){
+
+            $.ajax({
+                url: "fill/leave_apply",
+                type: "get",
+                dataType: "json",
+                async: false,
+                success: function (list) {
+                    var lis;
+                    var n;
+                    var kai='<table border=1 cellspacing="0">' +
+                        '<th>序号</th>\n' +
+                        '    <th>账号</th>\n' +
+                        '    <th>原因</th>\n' +
+                        '    <th>离校时间</th>\n' +
+                        '    <th>返校时间</th>\n' +
+                        '    <th>申请时间</th>';
+                    var jie='</table>';
+                    for (var i = 0; i < list.length; i++) {
+                        n=i+1;
+
+                        var t1='<tr>';
+                        var li0= '<td id="num">' + n + '</td>'
+                        var li1= '<td>' + list[i].uid + '</td>'
+                        var li2= '<td>' + list[i].reason + '</td>'
+                        var li3 = '<td>' + list[i].l_time + '</td>'
+                        var li4 = '<td>' + list[i].r_time + '</td>'
+       /*                 var li5= '<td>' + list[i].couns+ '</td>'
+                        var li6 = '<td>' + list[i].D_secr + '</td>'    //显示undefined
+                        var li7 = '<td>' + list[i].secr + '</td>'*/
+                        var li5 = '<td>' + list[i].a_time + '</td>'
+                        var but=  '<button id="btn">' + "查看进度" + '</button>'
+                        var t2='</tr>';
+                        lis += t1+li0+li1+li2+li3+li4+li5+t2;
+                    }
+                    var list2=kai+lis+jie;
+                    $("#tr1").html(list2);
+                    $("#btn").click(function () {
+                        var num=document.getElementById("num").value;
+                        alert(num);
+                    })
+                },
+
+
+            })
+        }
+    </script>
+
+</head>
+<body>
+<div id="tr1"></div>
+</body>
+</html>-->

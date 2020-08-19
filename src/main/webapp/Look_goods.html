@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>look_goods</title>
+    <script language="JavaScript">
+        function back() {
+            self.location=document.referrer;
+        }
+    </script>
+    <style>
+table{margin:0 auto}
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:500px;
+            height:490px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        span.title{
+            font-family: myFirstFont;
+            display:block;
+            width:85px;
+            height:30px;
+            position:relative;
+            top:-20px;
+            text-align: center;
+            background: white;}
+    </style>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script>
+        window.onload=function() {
+            $.ajax({
+                url:"get/findall_gf",
+                type:"get",
+                dataType:"json",
+                sync:false,
+                success:function (list) {
+                    console.log(list)
+
+                    if(list.length==0){alert("无申请记录！")}
+                    else{
+
+                        var lis="",lis1="",lis2="",lis3="";
+
+                        var kai='<table border=:1"  cellspacing="0">'
+                        var tou= "<th>账号</th>" +
+                            "<th>物资名称</th>" +
+                            "<th>数量</th>" +
+                            "<th>申请事件</th>" +
+                            "<th>状态</th>" +
+                            "<th>意见</th>" +
+                            "<th>操作</th>"
+
+                        var jie="</table>"
+                        var n=1;
+                        for(var i=0;i<list.length;i++){
+                            if(list[i].status=="待审核"){
+                            var l2='<tr><td>'+list[i].uid+'</td>'
+                            var l3='<td>'+list[i].g_name+'</td>'
+                            var l4='<td>'+list[i].amount+'</td>'
+                            var l5='<td>'+list[i].time+'</td>'
+                            var l6='<td>'+list[i].status+'</td>'
+                            var l7='<td><select id="option"><option value="0">同意</option><option value="1">不同意</option></select></td>'
+                            var l8='<td><button id="bt'+i+ '" value="' +i+'">'+"确认"+'</button></td></tr>'
+                            lis=lis+l2+l3+l4+l5+l6+l7+l8;
+                        }
+                            if(list[i].status=="同意"){
+                                var l22='<tr><td>'+list[i].uid+'</td>'
+                                var l23='<td>'+list[i].g_name+'</td>'
+                                var l24='<td>'+list[i].amount+'</td>'
+                                var l25='<td>'+list[i].time+'</td>'
+                                var l26='<td>'+list[i].status+'</td>'
+                                var l27='<td><select id="option"><option value="0">已发放</option></select></td>'
+                                var l28='<td><button id="bt'+i+ '" value="' +i+'">'+"确认"+'</button></td></tr>'
+                                lis2=lis2+l22+l23+l24+l25+l26+l27+l28;
+                            }
+                            if(list[i].status=="不同意"){
+                                var l12='<tr><td>'+list[i].uid+'</td>'
+                                var l13='<td>'+list[i].g_name+'</td>'
+                                var l14='<td>'+list[i].amount+'</td>'
+                                var l15='<td>'+list[i].time+'</td>'
+                                var l16='<td>'+list[i].status+'</td><td></td><td></td></tr>'
+                                lis1=lis1+l12+l13+l14+l15+l16;
+                            }
+                            if(list[i].status=="已发放"){
+                                var l32='<tr><td>'+list[i].uid+'</td>'
+                                var l33='<td>'+list[i].g_name+'</td>'
+                                var l34='<td>'+list[i].amount+'</td>'
+                                var l35='<td>'+list[i].time+'</td>'
+                                var l36='<td>'+list[i].status+'</td><td></td><td></td></tr>'
+                                lis3=lis3+l32+l33+l34+l35+l36;
+                            }
+                        }
+                        $("#p1").html(kai+tou+lis+lis2+lis1+lis3+jie);
+                        var obj=document.getElementById("p1").getElementsByTagName("button")
+
+                        for( var j=obj.length-1;j>=0;j--){
+
+                            obj[j].onclick =function(){
+                                var status=$("#option option:selected").text();
+                                var formid=list[this.value].formid;
+                                var g_name=list[this.value].g_name;
+                                var amount=list[this.value].amount;
+                                $.ajax({
+                                    url:"get/update_gf",
+                                    type:"post",
+                                    data:{"formid":formid,"status":status,"amount":amount,"g_name":g_name},
+                                    dataType: "json",
+                                    async: false,
+                                    success:function (data) {
+                                        if(data.flag=="1"){
+                                            alert("修改成功")
+                                            window.history.go(0)}
+                                        else{
+                                            alert("修改失败！")
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                    }
+
+                }
+            })
+
+        }
+    </script>
+</head>
+<body>
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+<p class="p2" ><a href="javascript:location.href='exitServlet';">退出</a></p>
+<hr>
+<p class="p2"><input name="button" type="button" onclick="back()" value="返回" style="width:110px; height:40px"></p>
+
+<div>
+
+
+<div1 id="p1"></div1>
+</div>
+</body>
+</html>

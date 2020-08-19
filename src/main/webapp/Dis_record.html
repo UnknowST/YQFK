@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+table{margin:0 auto}
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:510px;
+            height:700px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        span.title{
+            font-family: myFirstFont;
+            display:block;
+            width:85px;
+            height:30px;
+            position:relative;
+            top:-20px;
+            text-align: center;
+            background: white;}
+    </style>
+    <script language="JavaScript">
+        function back() {
+            self.location=document.referrer;
+        }
+    </script>
+    <script language="JavaScript">
+        function back() {
+            self.location=document.referrer;
+        }
+    </script>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+   <!-- 消毒记录查询-->
+    <script src="js/jquery-3.3.1.js"></script>
+
+<script>
+    window.onload=function () {
+        $.ajax({
+            url:"get/findall_Dis",  //
+            type:"get",
+            dataType:"json",
+            sync:false,
+            success:function (list) {
+                if(list.length==0) {
+                    alert("暂无消毒记录")
+                    self.location=document.referrer;    //回退上一页
+                }
+                else {
+                 var lis1=" ",lis2=" ";
+                 var kai='<table border="1" cellspacing="0">'
+                 var tou='<th>序号</th>' +
+                     '<th>消毒人员编号</th>' +
+                     '<th>楼号</th>' +
+                     '<th>房间号</th>' +
+                     '<th>消毒时间</th>'
+                var wei='</table>'
+                    var n=0;
+                for(var i=0;i<list.length;i++){
+                    n=n+1;
+                    var li1='<tr><td>'+n+'</td>';
+                    var li2='<td>'+list[i].hid+'</td>'
+                    var li3='<td>'+list[i].block+'</td>'
+                    var li4='<td>'+list[i].room+'</td>'
+                    var li5='<td>'+list[i].time+'</td></tr>'
+                    lis1=lis1+li1+li2+li3+li4+li5;
+                }
+                /*$("#div1").html(kai+tou+lis1+wei);*/
+
+                $("#btn1").click(function () {
+                    if($("#hid").val().length!=0||$("#block").val().length!=0
+                    ||$("#room").val().length!=0){
+                        if($("#div1").css("display")=="block"){
+                            d1=document.getElementById("div1")
+                            d1.style.display="none"}
+                        var hid=$("#hid").val();
+                        var block=$("#block").val();
+                        var room=$("#room").val();
+                        search(hid,block,room,list);
+
+
+                    }else{
+                        window.history.go(0) //刷新
+                    }
+
+                })
+            }}
+
+        })
+    }
+    function search(hid,block,room,list) {
+        console.log(list)
+        var list1= [],list2=[],
+            list3=[] ,
+            list4=[];
+        var lis1=" ",lis2=" ";
+        var kai='<table border="1" cellspacing="0">'
+        var tou='<th>序号</th>' +
+            '<th>消毒人员编号</th>' +
+            '<th>楼号</th>' +
+            '<th>房间号</th>' +
+            '<th>消毒时间</th>'
+        var wei='</table>'
+        var t=0;
+
+
+
+
+            if(hid.length!=0&&block.length==0&&room.length==0) {
+                t=0;
+                for(var i=0;i<list.length;i++){
+                    if(list[i].hid==hid) {list1[t]=list[i];
+                        t=t+1;}
+                }
+
+
+            }
+                if(hid.length!=0&&block.length!=0&&room.length==0){
+                    t=0;
+                    for(var i=0;i<list.length;i++){
+                        if(list[i].hid==hid&&list[i].block==block) {list1[t]=list[i];
+                            t=t+1;}
+                    }
+
+                }
+        if(hid.length!=0&&block.length==0&&room.length!=0){
+
+            t=0;
+            for(var i=0;i<list.length;i++){
+                if(list[i].hid==hid&&list[i].room==room) {list1[t]=list[i];
+                    t=t+1;}
+            }
+
+        }
+        if(hid.length==0&&block.length!=0&&room.length==0){
+            t=0;
+            for(var i=0;i<list.length;i++){
+                if(list[i].block==block) {list1[t]=list[i];
+                    t=t+1;}
+            }
+
+        }
+        if(hid.length==0&&block.length!=0&&room.length!=0){
+            t=0;
+            for(var i=0;i<list.length;i++){
+                if(list[i].block==block&&list[i].room==room) {list1[t]=list[i];
+                    t=t+1;}
+            }
+
+        }
+        if(hid.length==0&&block.length==0&&room.length!=0){
+            t=0;
+            for(var i=0;i<list.length;i++){
+                if(list[i].room==room) {list1[t]=list[i];
+                    t=t+1;}
+            }
+
+        }
+        if(hid.length!=0&&block.length!=0&&room.length!=0){
+            t=0;
+            for(var i=0;i<list.length;i++){
+                if(list[i].hid==hid&&list[i].block==block&&list[i].room==room) {list1[t]=list[i];
+                    t=t+1;}
+            }
+
+        }
+
+if(list1.length==0)  {
+    alert("结果为空！");
+
+}
+        else{
+         var n=0;
+        for(var i=0;i<list1.length;i++){
+            n=n+1;
+            var li11='<tr><td>'+n+'</td>';
+            var li12='<td>'+list1[i].hid+'</td>'
+            var li13='<td>'+list1[i].block+'</td>'
+            var li14='<td>'+list1[i].room+'</td>'
+            var li15='<td>'+list1[i].time+'</td></tr>'
+            lis1=lis1+li11+li12+li13+li14+li15;
+        }
+        $("#div2").html(kai+tou+lis1+wei);
+
+}
+    }
+</script>
+
+</head>
+<body>
+<p class="p2"><input name="button" type="button" onclick="back()" value="返回" style="width:110px; height:40px"></p>
+        <DIV>
+<table>
+    <tr>
+        <td><label>消毒人员编号:</label></td>
+        <td><input type="text" placeholder="请输入消毒人员编号..." id="hid" name="hid">
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<td rowspan="3"><input type="button" id="btn1" value="搜索"></td> </td>
+    </tr>
+    <tr>
+        <td><label>楼号:</label></td>
+        <td><input type="text" placeholder="请输入楼号..." id="block" name="hid"></td>
+</tr>
+    <tr>
+        <td><label>房间号:</label></td>
+        <td><input type="text" placeholder="请输入房间号..." id="room" name="room"></td>
+    </tr>
+<br>
+</table>
+
+<div1 id="div1">
+
+</div1>
+
+<div2 id="div2">
+
+</div2>
+</DIV>
+</body>
+</html>

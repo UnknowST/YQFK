@@ -1,0 +1,267 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+    <title>houqin </title>
+    <style>
+
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:250px;
+            height:250px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        span.title{
+            font-family: myFirstFont;
+            display:block;
+            width:85px;
+            height:30px;
+            position:relative;
+            top:-20px;
+            text-align: center;
+            background: white;}
+    </style>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <meta charset="utf-8">
+    <script src="js/jquery-3.3.1.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/popup.css" />
+<script>
+    function xianshi() {
+         var d1=document.getElementById("d1");
+        if($("#d1").css("display")=="block")
+           d1.style.display="none"
+        else
+            d1.style.display="block"
+
+
+    }
+
+</script>
+
+</head>
+
+<body onLoad="startTime()">
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+
+<p class="p2">当前时间为<font><span id="nowDateTimeSpan"></span></font></p>
+<p class="p2" ><a href="javascript:location.href='exitServlet';">退出</a></p>
+<hr>
+<br>
+<div>
+<!-- 点击按钮 -->
+<p class="p2"><a href="Health_R.html">健康信息填报</a></p>
+<p class="p2"><a href="DIS_apply.html">消毒记录登记</a></p>
+<p class="p2"><a id="d2" href="javascript:void(0)"  onclick="xianshi()" >每日体温登记</a></p>
+<div1 id="d1" style="display: none">
+<p class="p2"><a href="javascript:void(0)"  onclick="add()">
+
+    添加学生
+
+</a>&nbsp&nbsp&nbsp&nbsp
+<a href="javascript:void(0)"  onclick="add1()">
+
+    添加老师
+
+</a></p>
+
+</div1>
+<p class="p2"> <a href="Look_goods.html">查看防疫物资申请</a></p>
+
+
+
+<!--  弹框的div -->
+
+<div2 id="contes" style="">
+
+    <div3 style="width:500px;height:40px;">
+
+        添加学生每日体温测量
+
+        <hr>
+
+
+
+        <form id="studeng" style=" margin-left: 100px;">
+            <table>
+                <tr>
+                    <td><lable>学号:</lable></td>
+                    <td><input type="text" name="uid" id="uid"> </td>
+                </tr>
+                <tr>
+                    <td><lable>体温:</lable></td>
+                    <td><input type="text" name="temp" id="temp"> </td>
+                </tr>
+                <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="bt1" name="bt1" value="提交"></td>
+                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="bt2" name="bt3"   value="取消"></td>
+                </tr>
+            </table>
+        </form>
+
+    </div3>
+
+</div2>
+
+<div4 id="all_light1">
+
+</div4>
+
+
+<div5 id="contes1" style="">
+
+    <div6 style="width:500px;height:40px;">
+        添加老师每日体温测量
+
+        <hr>
+<form id="teacher" style=" margin-left: 100px;">
+    <table>
+        <tr>
+            <td><lable>工号:</lable></td>
+            <td><input type="text" name="uid1" id="uid1"> </td>
+            <tr>
+            <td><lable>体温:</lable></td>
+            <td><input type="text" name="temp1" id="temp1"> </td>
+        </tr>
+        </tr>
+        <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="bt3" name="bt3" value="提交"></td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="bt4" name="bt4" value="取消"></td>
+        </tr>
+    </table>
+</form>
+    </div6>
+</div5>
+        <div7 id="all_light">
+            </div7>
+</div>
+</body>
+
+<script>
+
+    function add() {
+
+        document.getElementById('all_light').style.display = 'block';
+
+        document.getElementById('contes').style.display = 'block';
+
+    }
+    function add1() {
+
+        document.getElementById('all_light1').style.display = 'block';
+
+        document.getElementById('contes1').style.display = 'block';
+
+    }
+    $("#bt2").click(function () {
+        document.getElementById('all_light').style.display = 'none';
+
+        document.getElementById('contes').style.display = 'none';
+    })
+    $("#bt4").click(function () {
+        document.getElementById('all_light1').style.display = 'none';
+
+        document.getElementById('contes1').style.display = 'none';
+    })
+
+    $("#bt1").click(function () {
+        var uid=$("#uid").val();
+        var temp=$("#temp").val();
+        $.ajax({
+            url:'fill/d_insert',
+            type:'post',
+            dataType:'json',
+            data:{"uid":uid,"temp":temp,"num":1},
+            sync:false,
+            success:function (data) {
+
+                 console.log(data)
+                if (data.flag==1){
+
+                    alert("添加成功")
+
+
+                }
+                else{
+                    alert("添加失败，请重新提交！");
+                }
+
+            }
+        })
+    })
+
+    $("#bt3").click(function () {
+        var uid=$("#uid1").val();
+        var temp=$("#temp1").val();
+        $.ajax({
+            url:'fill/d_insert',
+            type:'post',
+            dataType:'json',
+            sync:false,
+            data:{"uid":uid,"temp":temp,"num":2},
+            success:function (data) {
+                if (data.flag==1){
+                    alert("添加成功")
+
+                }
+                else{
+                    alert("添加失败，请重新提交！");
+                }
+
+            }
+        })
+    })
+
+
+</script>
+
+</html>

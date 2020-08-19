@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DISAPPLY</title>
+    <style>
+
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:480px;
+            height:130px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        span.title{
+            font-family: myFirstFont;
+            display:block;
+            width:85px;
+            height:30px;
+            position:relative;
+            top:-20px;
+            text-align: center;
+            background: white;}
+    </style>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <script language="JavaScript">
+        function back() {
+            self.location=document.referrer;
+        }
+    </script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script>
+        window.onload=function(){
+
+            $.ajax({
+                url:"fill/address_findall",
+                type: "get",
+                dataType: "json",
+                async: true,
+                success:function (list) {
+
+                    var a=[],b=[];
+                    var kai="<select id='bid'>"
+                    var jie="</select>"
+                    var lis;
+                    var lis2;
+
+                    for(var i=0;i<list.length;i++){
+                       a[i]=list[i].block;    //json种的某列值读出
+                    }
+                    a=[...new Set(a)];   //数组转set去重复
+                    a=Array.from(a);      //set又转回数组
+                    for(var i=0;i<a.length;i++){
+                        li="<option value="+i+">"+a[i]+"</option>";
+                        lis+=li;
+                    }
+                    lis=kai+lis+jie;
+                    $("#blockid").html(lis);
+                    $("#bid").change(function () {    //监听select的值
+                        var num=$("#blockid option:selected").text();   //获取select选中的文本   为val时选中值
+
+                        var kai1="<select id='rid'>"
+                        var jie1="</select>"
+                        var lis2;
+                        var li1;
+                        for(var i=0;i<list.length;i++){
+                            if(list[i].block==num) {
+
+                                li1="<option value="+i+">"+list[i].room+"</option>";
+                                lis2+=li1;
+                            }
+                        }
+                        $("#roomid").html(kai1+lis2+jie1);
+                    })
+
+                    var num=$("#blockid option:selected").text();
+                    var kai1="<select id='rid'>"
+                    var jie1="</select>"
+                    var lis3;
+
+                    for(var i=0;i<list.length;i++){
+                        if(list[i].block==num) {
+                            li="<option value="+i+">"+list[i].room+"</option>";
+                            lis3+=li;
+                        }
+
+                    }
+                    $("#roomid").html(kai1+lis3+jie1);
+                }
+            })
+
+        }
+
+        $(function () {
+
+            $("#bt1").click(function () {
+                var blockid=$('#bid option:selected').text();
+                var roomid=$('#rid option:selected').text();
+
+                var time=document.getElementById("time").value;
+
+                var da={'block':blockid,'room':roomid,'time':time}
+                $.ajax(
+                    {
+                        url:"fill/dis_insert",
+                        type:"post",
+                        data:da,
+                        dataType:"json",
+                        async:false,    //同步或异步
+                        success:function (data) {
+                            if(data.flag=="1"){   //返回有错误
+                                alert("添加成功");
+
+                                self.location=document.referrer;    //回退上一页
+                            }else{
+                                alert(data.errorMsg)
+
+                            }
+                        },
+
+
+                    }
+                )
+
+            });
+        });
+    </script>
+</head>
+<body>
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+<p class="p2" ><a href="javascript:location.href='exitServlet';">退出</a></p>
+<hr>
+<p class="p2"><input name="button" type="button" onclick="back()" value="返回" style="width:110px; height:40px"></p>
+<br>
+<div>
+    <br>
+<form id="disform">
+    <table>
+        <tr>
+            <td><label>楼号:</label>
+            <div1 id="blockid"></div1>
+            <label>房间号:</label>
+            <div2 id="roomid"></div2></td>
+
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr>
+            <td><label>消毒时间：</label>
+
+                <input type="datetime-local" id="time">
+            </td>
+
+        </tr>
+
+
+
+
+    </table>
+    <p class="p2"><input type="button" id="bt1"  value="添加记录" style="width:110px; height:40px"></p>
+
+</form>
+</div>
+</body>
+</html>

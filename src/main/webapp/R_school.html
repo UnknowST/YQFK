@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>返校申请</title>
+    <style>
+
+        <!--
+        body{background-image: url(./school.jpg)}
+        .p1{font-size: 30px;text-align: center}
+        .p2{font-size: 20px;text-align: center}
+        h2{font-size: 20px}
+        -->
+        div{
+            position: center;
+            float: contour;
+            width:550px;
+            height:160px;
+            padding:10px 50px;
+            margin:50px;
+            margin:0 auto;
+            color:blue;
+            border:4px double maroon;
+        }
+        span.title{
+            font-family: myFirstFont;
+            display:block;
+            width:85px;
+            height:30px;
+            position:relative;
+            top:-20px;
+            text-align: center;
+            background: white;}
+    </style>
+    <script language="JavaScript">
+        function back() {
+            self.location=document.referrer;
+        }
+    </script>
+    <script language="JavaScript">
+        function startTime()
+        {
+            var today=new Date();//定义日期对象
+            var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+            var MM = today.getMonth()+1;//通过日期对象的getMonth()方法返回年
+            var dd = today.getDate();//通过日期对象的getDate()方法返回年
+            var hh=today.getHours();//通过日期对象的getHours方法返回小时
+            var mm=today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+            var ss=today.getSeconds();//通过日期对象的getSeconds方法返回秒
+            // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+            MM=checkTime(MM);
+            dd=checkTime(dd);
+            mm=checkTime(mm);
+            ss=checkTime(ss);
+            var day; //用于保存星期（getDay()方法得到星期编号）
+            if(today.getDay()==0)   day   =   "星期日 "
+            if(today.getDay()==1)   day   =   "星期一 "
+            if(today.getDay()==2)   day   =   "星期二 "
+            if(today.getDay()==3)   day   =   "星期三 "
+            if(today.getDay()==4)   day   =   "星期四 "
+            if(today.getDay()==5)   day   =   "星期五 "
+            if(today.getDay()==6)   day   =   "星期六 "
+            document.getElementById('nowDateTimeSpan').innerHTML=yyyy+"-"+MM +"-"+ dd +" " + hh+":"+mm+":"+ss+"   " + day;
+            setTimeout('startTime()',1000);//每一秒中重新加载startTime()方法
+        }
+        function checkTime(i)
+        {
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+    </script>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/Teacher.js"></script>
+    <script>
+        $(function () {
+            $("#btn1").click(function () {
+
+                var reason=document.getElementById("reason").value;
+                var dept=$("#collage option:selected").text();
+                var tname=$("#tname option:selected").text();
+                var tid=$("#tid option:selected").text();
+                var e_time=document.getElementById("e_time").value;
+                var  form={"reason":reason,"dept":dept,"tname":tname,"tid":tid,"e_time":e_time}
+
+                $.ajax(
+
+                    {
+                        url:"fill/e_school",
+                        type:"post",
+                        data:form,
+                        dataType:"json",
+                        async:false,
+                        success:function (data) {
+
+                            if(data.flag=="1"){
+                                alert("办理成功");
+                                window.location.href="./student.html";
+                            }else{
+                                alert(data.errorMsg)
+
+                            }
+                        },
+
+
+                    }
+                )
+
+            });
+        })
+    </script>
+</head>
+<body onLoad="startTime()">
+<p style="text-align:center"><img src="label.jpg" width="170" height="120" usemap="#Map">
+    <map name="Map">
+        <area shape="rect" coords="0,0,170,120" href="https://www.shou.edu.cn/">
+    </map>
+</p>
+
+<p class="p2">当前时间为<font><span id="nowDateTimeSpan"></span></font></p>
+<p class="p2" ><a href="javascript:location.href='exitServlet';">退出</a></p>
+<hr>
+<p class="p2"><input name="button" type="button" onclick="back()" value="返回" style="width:110px; height:40px"></p>
+<div>
+<span id="errorMsg"></span>
+<form id="rschoolfrom" method="post">
+    <table>
+        <tr>
+            <td><label>原因:</label></td>
+            <td><input type="text" id="reason" name="reason"></td>
+        </tr>
+        <tr>
+            <td>
+                <label>学院:</label>
+                <div1 id="collage1"></div1>
+
+            </td>
+            <td>
+                <label>辅导员姓名:</label>
+                <div2 id="tname1"></div2>
+
+            </td>
+            <td>
+                <label>辅导员工号:</label>
+                <div3 id="tid1"></div3>
+
+            </td>
+        </tr>
+        <tr>
+            <td><label>返校时间:</label></td>
+            <td><input type="datetime-local" id="e_time" name="e_time"></td>
+        </tr>
+
+
+
+
+
+    </table>
+    <p class="p2"><input type="button" id="btn1" name="btn1" value="确认提交" style="width:110px; height:40px"></p>
+</form>
+</div>
+</body>
+</html>
